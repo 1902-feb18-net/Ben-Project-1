@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Project_1.DBContext.Library.Repositories
 {
-    public class OrderRepository : IOrdersRepository
+    public class OrderRepository : IOrderGamesRepository
     {
 
         private readonly Project0Context _db;

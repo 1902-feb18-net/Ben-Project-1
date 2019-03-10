@@ -13,9 +13,9 @@
         <form asp-action="AddGames">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="NextOrderGame.Game.Name" class="control-label" id="DefaultStore"></label>
-                <select asp-for="NextOrderGame.Game.Name"
-                        asp-items="@(new SelectList(Model.Games, "Name", "Name"))" class="form-control"></select>
+                <label asp-for="NextOrderGame.GameId" class="control-label" id="DefaultStore"></label>
+                <select asp-for="NextOrderGame.GameId"
+                        asp-items="@(new SelectList(Model.Games, "Id", "Name"))" class="form-control"></select>
             </div>
             <div class="form-group">
                 <label asp-for="NextOrderGame.GameQuantity" class="control-label"></label>

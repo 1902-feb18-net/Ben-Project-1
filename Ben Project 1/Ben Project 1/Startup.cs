@@ -41,7 +41,7 @@ namespace Ben_Project_1
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IStoreRepository, StoreRepository>();
             services.AddScoped<IOrdersRepository, OrderRepository>();
-
+            services.AddScoped<IGamesRepository, GamesRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }

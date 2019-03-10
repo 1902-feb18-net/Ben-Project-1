@@ -48,7 +48,7 @@
         </form>
     </div>
 </div>
-@if (Model.OrderGames.Count > 0)
+@if (Model.OrderGames != null)
 {
     @foreach (var item in Model.OrderGames)
     {
@@ -91,10 +91,10 @@
     </tr>
     }
 }
-<div>
-    <a asp-action="Index">Back to Index</a>
-    <a asp-action="AddGames">Add game to purchase</a>
-</div>
+    <div>
+        <a asp-action="Index">Back to Index</a>
+        @Html.ActionLink("Add game", "AddGames", new { order = Model }) |
+    </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
