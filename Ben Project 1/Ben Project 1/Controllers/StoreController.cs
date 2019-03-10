@@ -15,11 +15,11 @@ namespace Ben_Project_1.Controllers
     {
         public ICustomerRepository CustomerRepo { get; }
         public IStoreRepository Repo { get; }
-        public IOrderGamesRepository OrdersRepo { get; }
+        public IOrdersRepository OrdersRepo { get; }
 
         private readonly Project0Context _db;
 
-        public StoreController(ICustomerRepository customerRepo, IStoreRepository storeRepo, IOrderGamesRepository ordersRepo)
+        public StoreController(ICustomerRepository customerRepo, IStoreRepository storeRepo, IOrdersRepository ordersRepo)
         {
             CustomerRepo = customerRepo;
             Repo = storeRepo;

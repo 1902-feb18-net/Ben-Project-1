@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Project_1.BLL.Library.IRepos
 {
-    public interface IOrderGamesRepository
+    public interface IOrdersRepository
     {
         /// <summary>
         /// Search all orders for ID

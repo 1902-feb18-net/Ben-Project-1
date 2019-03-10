@@ -162,28 +162,30 @@ namespace Ben_Project_1.Controllers
                     OrderDate = DateTime.Now,
                 };
 
-                var OrderItems = _db.OrderGames.ToList();
-                OrderItems.AddRange(_db.OrderGames.Where(o => o.OrderId == order.OrderId).ToList());
-                order.OrderGames = new List<OrderGamesImp>();
+                Repo.AddOrderItem(order.NextOrderGame);
 
-                foreach (var i in OrderItems)
-                {
-                    var tempOrderGames = new OrderGamesImp
-                    {
-                        OrderId = i.OrderId,
-                        GameId = i.GameId,
-                        Price = i.Price,
-                        GameQuantity = i.GameQuantity,
-                    };
-                    order.OrderGames.Add(tempOrderGames);
-                }
+                //var OrderItems = _db.OrderGames.ToList();
+                //OrderItems.AddRange(_db.OrderGames.Where(o => o.OrderId == order.OrderId).ToList());
+                //order.OrderGames = new List<OrderGamesImp>();
+
+                //foreach (var i in OrderItems)
+                //{
+                //    var tempOrderGames = new OrderGamesImp
+                //    {
+                //        OrderId = i.OrderId,
+                //        GameId = i.GameId,
+                //        Price = i.Price,
+                //        GameQuantity = i.GameQuantity,
+                //    };
+                //    order.OrderGames.Add(tempOrderGames);
+                //}
                 ord.GamesInOrder = new List<OrderGamesImp>();
                 ord.GamesInOrder = order.OrderGames;
                 ord.OrderCost = ord.TotalOrderCost();
                 if (TempData.ContainsKey("Current Customer"))
                     ord.OrderCustomer = int.Parse(TempData.Peek("Current Customer").ToString());
                 Repo.AddOrder(ord);
-
+                Repo.AddOrderItem(order.NextOrderGame);
 
                 return RedirectToAction("Index", "Orders");
             }
@@ -301,9 +303,10 @@ namespace Ben_Project_1.Controllers
             ord.NextOrderGame.Edition = Order.NextOrderGame.Edition;
             ord.NextOrderGame.Price = Order.NextOrderGame.GetCostOfPurchase();
             ord.NextOrderGame.Game.Name = Order.NextOrderGame.Game.Name;
+            ord.NextOrderGame.OrderId = _db.Orders.Max(o => o.OrderId) + 1;
 
-            var OrderItems = new List<OrderGames>();
-            OrderItems.AddRange(_db.OrderGames.Where(o => o.OrderId == _db.Orders.Max(r => r.OrderId) + 1).ToList());
+            //var OrderItems = new List<OrderGames>();
+            //OrderItems.AddRange(_db.OrderGames.Where(o => o.OrderId == _db.Orders.Max(r => r.OrderId) + 1).ToList());
 
             if (TempData.ContainsKey("Current Customer")) //populates the fields'  initial values
             {
@@ -314,24 +317,22 @@ namespace Ben_Project_1.Controllers
                 ord.OrderId = _db.Orders.Max(o => o.OrderId) + 1;
             }
 
-            foreach (var i in OrderItems)
-            {
-                var tempOrderGames = new OrderGamesImp
-                {
-                    OrderId = i.OrderId,
-                    GameId = i.GameId,
-                    Price = i.Price,
-                    GameQuantity = i.GameQuantity,
-                };
-                Order.OrderCost += tempOrderGames.Price;
-                Order.OrderGames.Add(tempOrderGames);
-            }
+            //foreach (var i in OrderItems)
+            //{
+            //    var tempOrderGames = new OrderGamesImp
+            //    {
+            //        OrderId = i.OrderId,
+            //        GameId = i.GameId,
+            //        Price = i.Price,
+            //        GameQuantity = i.GameQuantity,
+            //    };
+            //    Order.OrderCost += tempOrderGames.Price;
+            //    Order.OrderGames.Add(tempOrderGames);
+            //}
 
             ord.OrderGames = Order.OrderGames;
             ord.OrderCost = ord.NextOrderGame.Price + Order.OrderCost;
             ord.OrderGames.Add(ord.NextOrderGame);
-
-            Repo.AddOrderItem(ord.NextOrderGame);
 
             if (ord.Stores == null)
             {
