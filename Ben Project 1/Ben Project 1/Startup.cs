@@ -39,6 +39,9 @@ namespace Ben_Project_1
             });
 
             services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<IStoreRepository, StoreRepository>();
+            services.AddScoped<IOrdersRepository, OrderRepository>();
+
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
@@ -65,7 +68,7 @@ namespace Ben_Project_1
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Customer}/{action=Create}/{id?}");
             });
         }
     }

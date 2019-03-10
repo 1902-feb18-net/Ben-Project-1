@@ -2,13 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Ben_Project_1.Models;
+using DBContext.Library;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Project_1.BLL.Library.Implementation;
+using Project_1.BLL.Library.IRepos;
 
 namespace Ben_Project_1.Controllers
 {
     public class StoreController : Controller
     {
+        public ICustomerRepository CustomerRepo { get; }
+        public IStoreRepository Repo { get; }
+        public IOrdersRepository OrdersRepo { get; }
+
+        private readonly Project0Context _db;
+
+        public StoreController(ICustomerRepository customerRepo, IStoreRepository storeRepo, IOrdersRepository ordersRepo)
+        {
+            CustomerRepo = customerRepo;
+            Repo = storeRepo;
+            OrdersRepo = ordersRepo;
+        }
+
         // GET: Store
         public ActionResult Index()
         {
@@ -41,6 +58,32 @@ namespace Ben_Project_1.Controllers
             catch
             {
                 return View();
+            }
+        }
+
+        // POST: Store/Select
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Select(StoreModel store)
+        {
+            try
+            {
+                // TODO: Add insert logic here
+                var st = new StoreImp
+                {
+                    IDNumber = store.StoreId,
+                    Location = store.Location
+                };
+
+                TempData["Store Selected"] = st.IDNumber;
+                TempData.Keep();
+
+
+                return RedirectToAction("Index", "Orders");
+            }
+            catch
+            {
+                return RedirectToAction("Create", "Customer");
             }
         }
 

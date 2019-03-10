@@ -25,4 +25,10 @@
     <ProjectReference Include="..\DBContext.Library\DBContext.Library.csproj" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Folder Include="ViewModels\" />
+    <Folder Include="Views\OrderGames\" />
+  </ItemGroup>
+
 </Project>

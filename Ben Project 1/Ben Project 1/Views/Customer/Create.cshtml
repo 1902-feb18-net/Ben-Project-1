@@ -1,0 +1,54 @@
+﻿@model Ben_Project_1.Models.CustomerModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h4>Sign Up</h4>
+<hr />
+<form asp-action="Create">
+    <div class="form-group">
+        <label asp-for="FirstName" class="control-label"></label>
+        <input asp-for="FirstName" class="form-control" />
+        <span asp-validation-for="FirstName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="LastName" class="control-label"></label>
+        <input asp-for="LastName" class="form-control" />
+        <span asp-validation-for="LastName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        @* use a dropdown (<select>) to choose a genre. *@
+        @* think about what the generated HTML ultimately needs...
+            it needs to know the names of every genre. *@
+        <label asp-for="DefaultStoreId" class="control-label" id="DefaultStore"></label>
+        <select asp-for="DefaultStoreId"
+                asp-items="@(new SelectList(Model.Stores, "IDNumber", "Location"))" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>
+<h4>Log In</h4>
+<form asp-action="LogIn">
+    <div class="form-group">
+        <label asp-for="FirstName" class="control-label"></label>
+        <input asp-for="FirstName" class="form-control" />
+        <span asp-validation-for="FirstName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="LastName" class="control-label"></label>
+        <input asp-for="LastName" class="form-control" />
+        <span asp-validation-for="LastName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="LogIn" class="btn btn-primary" />
+    </div>
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
