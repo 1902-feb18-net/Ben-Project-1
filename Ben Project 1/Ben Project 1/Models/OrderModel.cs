@@ -20,12 +20,16 @@ namespace Ben_Project_1.Models
         [Display(Name = "ID")]
         public int OrderId { get; set; }
 
+        [Display(Name = "Date")]
         public DateTime OrderDate { get; set; }
 
+        [Display(Name = "Customer ID")]
         public int OrderCustomerId { get; set; }
 
+        [Display(Name = "Total Cost")]
         public decimal OrderCost { get; set; }
 
+        [Display(Name = "Store ID")]
         public int OrderStoreId { get; set; }
 
         public List<OrderGamesImp> OrderGames { get; set; }
