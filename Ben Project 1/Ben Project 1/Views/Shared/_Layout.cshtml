@@ -16,9 +16,26 @@
               integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE="/>
     </environment>
     <link rel="stylesheet" href="~/css/site.css" />
+    <style>
+        body.background-color{
+            height : 100%;
+            width : 100%;
+            background-color:blanchedalmond
+        }
+        header.header-color{
+            height : 100%;
+            width : 100%;
+            background-color :bisque
+        }
+        .header-image{
+            width : 100%;
+            height : auto;
+            margin-bottom : 1em;
+        }
+    </style>
 </head>
-<body>
-    <header>
+<body class="background-color">
+    <header class="header-color">
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Ben_Project_1</a>
@@ -53,6 +70,7 @@
                 </div>
             </div>
         </nav>
+        <img src="~/css/Header_Image.jpg" class="header-image" />
     </header>
     <div class="container">
         <partial name="_CookieConsentPartial" />

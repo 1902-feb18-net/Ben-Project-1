@@ -24,13 +24,9 @@
             </div>
             <div class="form-group">
                 <label asp-for="NextOrderGame.Edition" class="control-label"></label>
-                <input asp-for="NextOrderGame.Edition" class="form-control" />
-                <span asp-validation-for="NextOrderGame.Edition" class="text-danger"></span>
+                <select asp-for="NextOrderGame.Edition"
+                        asp-items="@(new SelectList(Model.Editions, "Key", "Value"))" class="form-control"></select>
             </div>
-            <div class="form-group">
-                <label asp-for="NextOrderGame.Price" class="control-label"></label>
-                <input asp-for="NextOrderGame.Price" class="form-control" readonly />
-                <span asp-validation-for="NextOrderGame.Price" class="text-danger"></span>
                 <!-- other non-hidden form fields -->
                 @for (int i = 0; i < Model.OrderGames.Count; i++)
                 {
@@ -44,13 +40,43 @@
                     <input type="submit" value="Add" class="btn btn-primary" />
                 </div>
 
-</form>
+        </form>
+    </div>
+    <div>
+        <p><b>Standard Edition Prices:</b></p>
+
+        @foreach (var item in Model.Games)
+        {
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => item.Name)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => item.Cost)
+                </dd>
+            </dl>
+        }
+
+            <p><b>Advanced Edition Prices:</b></p>
+
+        @foreach (var item in Model.Games)
+        {
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => item.Name)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => item.AdvancedCost)
+                </dd>
+            </dl>
+        }
+
+            <p><b>Deluxe Edition Prices are $10 more than the Advanced edition</b></p>
+        
+
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

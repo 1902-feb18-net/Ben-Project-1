@@ -37,6 +37,9 @@ namespace Ben_Project_1.Controllers
         public ActionResult Index()
         {
             TempData.Keep();
+            string name = CustomerRepo.GetCustomerById(int.Parse(TempData.Peek("Current Customer").ToString())).FirstName
+            + " " + CustomerRepo.GetCustomerById(int.Parse(TempData.Peek("Current Customer").ToString())).LastName;
+            TempData["Customer Name"] = name;
             return View();
         }
 
@@ -272,6 +275,12 @@ namespace Ben_Project_1.Controllers
         public ActionResult AddGames(OrderModel Order)
         {
             Order.Games = GameRepo.GetAllGames().ToList();
+
+            Order.Editions = new Dictionary<int, string>();
+            Order.Editions.Add(1, "Standard Edition");
+            Order.Editions.Add(2, "Advanced Edition");
+            Order.Editions.Add(3, "Deluxe Edition");
+
             Order.NextOrderGame = new OrderGamesImp
             {
                 Price = 19.99m,

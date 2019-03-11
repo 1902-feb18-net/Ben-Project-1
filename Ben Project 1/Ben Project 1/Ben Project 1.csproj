@@ -27,8 +27,14 @@
 
 
   <ItemGroup>
+    <Folder Include="Images\" />
     <Folder Include="ViewModels\" />
     <Folder Include="Views\OrderGames\" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Include="wwwroot\css\Header_Image.jpg" />
   </ItemGroup>
 
 </Project>

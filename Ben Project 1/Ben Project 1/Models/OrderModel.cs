@@ -10,6 +10,13 @@ namespace Ben_Project_1.Models
 {
     public class OrderModel
     {
+
+        public OrderModel()
+        {
+            Editions = new Dictionary<int, string>();
+
+        }
+
         [Display(Name = "ID")]
         public int OrderId { get; set; }
 
@@ -28,5 +35,8 @@ namespace Ben_Project_1.Models
         public List<StoreImp> Stores { get; set; }
 
         public List<GamesImp> Games { get; set; }
+
+        public Dictionary<int, string> Editions;
+
     }
 }

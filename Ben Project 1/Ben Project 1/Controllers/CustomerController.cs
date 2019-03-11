@@ -49,7 +49,7 @@ namespace Ben_Project_1.Controllers
         // GET: Customer/Create
         public ActionResult Create()
         {
-
+            TempData.Clear();
             var customer = new CustomerModel
 
             {
@@ -73,7 +73,7 @@ namespace Ben_Project_1.Controllers
                     DefaultStoreId = customer.DefaultStoreId
                 };
 
-                TempData["Current Customer"] = cust.Id;
+                TempData["Current Customer"] = _db.Customers.Max(c => c.CustomerId) + 1;
 
                 Repo.AddCustomer(cust);
                 return RedirectToAction("Index", "Orders");
@@ -132,7 +132,8 @@ namespace Ben_Project_1.Controllers
                 CustomerId = Repo.GetCustomerById(temp).Id,
                 FirstName = Repo.GetCustomerById(temp).FirstName,
                 LastName = Repo.GetCustomerById(temp).LastName,
-                DefaultStoreId = Repo.GetCustomerById(temp).DefaultStoreId
+                DefaultStoreId = Repo.GetCustomerById(temp).DefaultStoreId,
+                Stores = StoreRepo.GetStores().ToList()
             };
 
             return View(Customer);
@@ -146,7 +147,7 @@ namespace Ben_Project_1.Controllers
             try
             {
                 int temp = int.Parse(TempData.Peek("Current Customer").ToString());
-
+                Customer.Stores = StoreRepo.GetStores().ToList();
                 // TODO: Add update logic here
                 var customer = new CustomerImp
                 {

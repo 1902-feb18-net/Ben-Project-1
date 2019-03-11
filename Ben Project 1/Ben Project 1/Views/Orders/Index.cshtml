@@ -3,15 +3,39 @@
 @{
     ViewData["Title"] = "Index";
 }
+<head>
+    <style>
+        .CreateOrderBut{
 
-<h1>Index</h1>
+        }
+        .LeftForm {
+            float: left;
+            margin-left: 15%;
+            margin-bottom: 10%
+        }
 
-<p>
-    <a asp-action="Create">Order a Product</a>
-</p>
-<p>
-    <a asp-action="Details">View Orders</a>
-</p>
+        .RightForm {
+            float: Right;
+            margin-right: 15%;
+            margin-bottom: 10%
+        }
+        .TitleText{
+            text-align:center
+        }
+    </style>
+</head>
+<h1 class="TitleText">Orders</h1>
+
+<div class="LeftForm">
+    <form asp-action="Create" method="get">
+        <input type="submit" value="Make An Order" class="btn btn-primary btn-lg btn-block" />
+    </form>
+</div>
+<div class="RightForm">
+    <form asp-action="Details" method="get">
+        <input type="submit" value="View Your Orders" class="btn btn-success btn-lg btn-block" />
+    </form>
+</div>
 @*<table class="table">
     <thead>
         <tr>

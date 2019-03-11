@@ -1,0 +1,50 @@
+﻿@model List<Ben_Project_1.Models.OrderModel>
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Order List</h4>
+    <hr />
+    @foreach (var item in Model)
+    {
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => item.OrderId)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => item.OrderId)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => item.OrderDate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => item.OrderDate)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => item.OrderCustomerId)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => item.OrderCustomerId)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => item.OrderCost)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => item.OrderCost)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => item.OrderStoreId)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => item.OrderStoreId)
+            </dd>
+        </dl>
+    }
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
