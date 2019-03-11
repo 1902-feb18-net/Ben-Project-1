@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Ben_Project_1.Models;
+using DBContext.Library;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Project_1.BLL.Library.Implementation;
@@ -17,16 +18,26 @@ namespace Ben_Project_1.Controllers
 
         public CustomerImp CurrentCustomer { get; }
 
-        public CustomerController(ICustomerRepository customerRepo, IStoreRepository storeRepo)
+        private readonly Project0Context _db;
+
+        public CustomerController(ICustomerRepository customerRepo, IStoreRepository storeRepo, Project0Context db)
         {
             Repo = customerRepo;
             StoreRepo = storeRepo;
+            _db = db;
         }
 
         // GET: Customer
         public ActionResult Index()
         {
-            return View();
+            TempData.Clear();
+            var customer = new CustomerModel
+
+            {
+                Stores = StoreRepo.GetStores().ToList()
+            };
+
+            return View("Create", customer);
         }
 
         // GET: Customer/Details/5
@@ -38,7 +49,7 @@ namespace Ben_Project_1.Controllers
         // GET: Customer/Create
         public ActionResult Create()
         {
-            TempData["Current Customer"] = null;
+
             var customer = new CustomerModel
 
             {
@@ -57,13 +68,17 @@ namespace Ben_Project_1.Controllers
                 // TODO: Add insert logic here
                 var cust = new CustomerImp
                 {
-                    //Id = customer.CustomerId,
                     FirstName = customer.FirstName,
                     LastName = customer.LastName,
                     DefaultStoreId = StoreRepo.GetStoreByLocation(customer.DefaultStoreId).IDNumber
                 };
 
                 TempData["Current Customer"] = cust.Id;
+
+                string name = Repo.GetCustomerById(cust.Id).FirstName + " " + Repo.GetCustomerById(cust.Id).LastName;
+
+                TempData["Customer Name"] = name;
+
                 Repo.AddCustomer(cust);
 
 
@@ -98,6 +113,10 @@ namespace Ben_Project_1.Controllers
                 };
 
                 TempData["Current Customer"] = cust.Id;
+
+                string name = Repo.GetCustomerById(cust.Id).FirstName + " " + Repo.GetCustomerById(cust.Id).LastName;
+
+                TempData["Customer Name"] = name;
                 TempData.Keep();
 
 

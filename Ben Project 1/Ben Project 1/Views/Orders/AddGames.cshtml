@@ -29,12 +29,22 @@
             </div>
             <div class="form-group">
                 <label asp-for="NextOrderGame.Price" class="control-label"></label>
-                <input asp-for="NextOrderGame.Price" class="form-control" readonly/>
+                <input asp-for="NextOrderGame.Price" class="form-control" readonly />
                 <span asp-validation-for="NextOrderGame.Price" class="text-danger"></span>
-            <div class="form-group">
-                <input type="submit" value="Add" class="btn btn-primary" />
-            </div>
-        </form>
+                <!-- other non-hidden form fields -->
+                @for (int i = 0; i < Model.OrderGames.Count; i++)
+                {
+                    @Html.HiddenFor(model => Model.OrderGames[i].OrderId)
+                    @Html.HiddenFor(model => Model.OrderGames[i].GameId)
+                    @Html.HiddenFor(model => Model.OrderGames[i].Edition)
+                    @Html.HiddenFor(model => Model.OrderGames[i].GameQuantity)
+                    @Html.HiddenFor(model => Model.OrderGames[i].Price)
+                }
+                <div class="form-group">
+                    <input type="submit" value="Add" class="btn btn-primary" />
+                </div>
+
+</form>
     </div>
 </div>
 

@@ -14,22 +14,22 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="OrderId" class="control-label"></label>
-                <input asp-for="OrderId" class="form-control" readonly/>
+                <input asp-for="OrderId" class="form-control" readonly />
                 <span asp-validation-for="OrderId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="OrderDate" class="control-label"></label>
-                <input asp-for="OrderDate" class="form-control" readonly/>
+                <input asp-for="OrderDate" class="form-control" readonly />
                 <span asp-validation-for="OrderDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="OrderCustomerId" class="control-label"></label>
-                <input asp-for="OrderCustomerId" class="form-control" readonly/>
+                <input asp-for="OrderCustomerId" class="form-control" readonly />
                 <span asp-validation-for="OrderCustomerId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="OrderCost" class="control-label"></label>
-                <input asp-for="OrderCost" class="form-control" readonly/>
+                <input asp-for="OrderCost" class="form-control" readonly />
                 <span asp-validation-for="OrderCost" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -38,14 +38,37 @@
                         asp-items="@(new SelectList(Model.Stores, "IDNumber", "Location"))" class="form-control"></select>
             </div>
             @*<div class="form-group">
-                    <label asp-for="OrderGames" class="control-label" id="DefaultStore"></label>
-                    <select asp-for="OrderGames"
-                            asp-items="@(new SelectList(Model.OrderGames, "GameId", "Game.Name"))" class="form-control"></select>
-                </div>*@
+                <label asp-for="OrderGames" class="control-label" id="DefaultStore"></label>
+                <select asp-for="OrderGames"
+                        asp-items="@(new SelectList(Model.OrderGames, "GameId", "Game.Name"))" class="form-control"></select>
+            </div>*@
+            @for (int i = 0; i < Model.OrderGames.Count; i++)
+            {
+                @Html.HiddenFor(model => Model.OrderGames[i].OrderId)
+                @Html.HiddenFor(model => Model.OrderGames[i].GameId)
+                @Html.HiddenFor(model => Model.OrderGames[i].Edition)
+                @Html.HiddenFor(model => Model.OrderGames[i].GameQuantity)
+                @Html.HiddenFor(model => Model.OrderGames[i].Price)
+            }
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
+        <div>
+            <a asp-action="Index">Back to Index</a>
+            @Html.ActionLink("Add game", "AddGames", new { order = Model }) |
+            <form asp-action="AddGames" method="get">
+                <!-- other non-hidden form fields -->
+                @for (int i = 0; i < Model.OrderGames.Count; i++)
+                {
+                    @Html.HiddenFor(model => Model.OrderGames[i].OrderId)
+                    @Html.HiddenFor(model => Model.OrderGames[i].GameId)
+                    @Html.HiddenFor(model => Model.OrderGames[i].Edition)
+                    @Html.HiddenFor(model => Model.OrderGames[i].GameQuantity)
+                }
+                <input type="submit" value="Add Game" class="btn btn-default" />
+            </form>
+        </div>
     </div>
 </div>
 @if (Model.OrderGames != null)
@@ -80,21 +103,10 @@
             }
 
         </td>
-        @*<td>
-            @Html.DisplayFor(modelItem => item.Price)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-        </td>*@
     </tr>
     }
 }
-    <div>
-        <a asp-action="Index">Back to Index</a>
-        @Html.ActionLink("Add game", "AddGames", new { order = Model }) |
-    </div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

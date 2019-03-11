@@ -132,16 +132,17 @@ namespace Ben_Project_1.Controllers
         // POST: Orders/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(OrderModel order, ICollection<OrderImp> placeholder)
+        public ActionResult Create(OrderModel order, ICollection<OrderGamesImp> placeholder)
         {
             try
             {
+
+                var stores = _db.Stores.ToList();
+                stores.AddRange(_db.Stores.ToList());
+                order.Stores = new List<StoreImp>();
+
                 if (order.Stores == null)
                 {
-                    var stores = _db.Stores.ToList();
-                    stores.AddRange(_db.Stores.ToList());
-                    order.Stores = new List<StoreImp>();
-
                     foreach (var s in stores)
                     {
                         var tempStore = new StoreImp
@@ -154,6 +155,7 @@ namespace Ben_Project_1.Controllers
                         order.Stores.Add(tempStore);
                     }
                 }
+                
 
                 // TODO: Add insert logic here
                 var ord = new OrderImp
@@ -162,30 +164,24 @@ namespace Ben_Project_1.Controllers
                     OrderDate = DateTime.Now,
                 };
 
-                Repo.AddOrderItem(order.NextOrderGame);
-
-                //var OrderItems = _db.OrderGames.ToList();
-                //OrderItems.AddRange(_db.OrderGames.Where(o => o.OrderId == order.OrderId).ToList());
-                //order.OrderGames = new List<OrderGamesImp>();
-
-                //foreach (var i in OrderItems)
-                //{
-                //    var tempOrderGames = new OrderGamesImp
-                //    {
-                //        OrderId = i.OrderId,
-                //        GameId = i.GameId,
-                //        Price = i.Price,
-                //        GameQuantity = i.GameQuantity,
-                //    };
-                //    order.OrderGames.Add(tempOrderGames);
-                //}
                 ord.GamesInOrder = new List<OrderGamesImp>();
                 ord.GamesInOrder = order.OrderGames;
+                ord.OrderCost = 0.00m;
+                for (int i = 0; i < ord.GamesInOrder.Count; i++)
+                {
+                    ord.GamesInOrder[i].Game = GameRepo.GetGameById(ord.GamesInOrder[i].GameId);
+                    //ord.OrderCost += item.Price;
+                }
                 ord.OrderCost = ord.TotalOrderCost();
+
                 if (TempData.ContainsKey("Current Customer"))
                     ord.OrderCustomer = int.Parse(TempData.Peek("Current Customer").ToString());
                 Repo.AddOrder(ord);
-                Repo.AddOrderItem(order.NextOrderGame);
+
+                foreach(var item in ord.GamesInOrder)
+                {
+                    Repo.AddOrderItem(item);
+                }
 
                 return RedirectToAction("Index", "Orders");
             }
@@ -296,14 +292,10 @@ namespace Ben_Project_1.Controllers
                 Order.OrderGames = new List<OrderGamesImp>();
             }
 
-            OrderModel ord = new OrderModel();
-            ord = Order;
-            ord.NextOrderGame.Game = GameRepo.GetGameById(Order.NextOrderGame.GameId);
-            ord.NextOrderGame.GameQuantity = Order.NextOrderGame.GameQuantity;
-            ord.NextOrderGame.Edition = Order.NextOrderGame.Edition;
-            ord.NextOrderGame.Price = Order.NextOrderGame.GetCostOfPurchase();
-            ord.NextOrderGame.Game.Name = Order.NextOrderGame.Game.Name;
-            ord.NextOrderGame.OrderId = _db.Orders.Max(o => o.OrderId) + 1;
+            Order.NextOrderGame.Game = GameRepo.GetGameById(Order.NextOrderGame.GameId);
+            Order.NextOrderGame.Price = Order.NextOrderGame.GetCostOfPurchase();
+            Order.NextOrderGame.Game.Name = Order.NextOrderGame.Game.Name;
+            Order.NextOrderGame.OrderId = _db.Orders.Max(o => o.OrderId) + 1;
 
             //var OrderItems = new List<OrderGames>();
             //OrderItems.AddRange(_db.OrderGames.Where(o => o.OrderId == _db.Orders.Max(r => r.OrderId) + 1).ToList());
@@ -311,33 +303,19 @@ namespace Ben_Project_1.Controllers
             if (TempData.ContainsKey("Current Customer")) //populates the fields'  initial values
             {
                 CustomerImp cust = CustomerRepo.GetCustomerById(int.Parse(TempData.Peek("Current Customer").ToString()));
-                ord.OrderStoreId = StoreRepo.GetStoreByLocation(cust.DefaultStoreId).IDNumber;
-                ord.OrderDate = DateTime.Now;
-                ord.OrderCustomerId = int.Parse(TempData.Peek("Current Customer").ToString());
-                ord.OrderId = _db.Orders.Max(o => o.OrderId) + 1;
+                Order.OrderStoreId = StoreRepo.GetStoreByLocation(cust.DefaultStoreId).IDNumber;
+                Order.OrderDate = DateTime.Now;
+                Order.OrderCustomerId = int.Parse(TempData.Peek("Current Customer").ToString());
+                Order.OrderId = _db.Orders.Max(o => o.OrderId) + 1;
             }
 
-            //foreach (var i in OrderItems)
-            //{
-            //    var tempOrderGames = new OrderGamesImp
-            //    {
-            //        OrderId = i.OrderId,
-            //        GameId = i.GameId,
-            //        Price = i.Price,
-            //        GameQuantity = i.GameQuantity,
-            //    };
-            //    Order.OrderCost += tempOrderGames.Price;
-            //    Order.OrderGames.Add(tempOrderGames);
-            //}
+            Order.OrderCost = Order.NextOrderGame.Price + Order.OrderCost;
+            Order.OrderGames.Add(Order.NextOrderGame);
 
-            ord.OrderGames = Order.OrderGames;
-            ord.OrderCost = ord.NextOrderGame.Price + Order.OrderCost;
-            ord.OrderGames.Add(ord.NextOrderGame);
-
-            if (ord.Stores == null)
+            if (Order.Stores == null)
             {
                 var stores = _db.Stores.ToList();
-                ord.Stores = new List<StoreImp>();
+                Order.Stores = new List<StoreImp>();
 
                 foreach (var s in stores)
                 {
@@ -348,11 +326,11 @@ namespace Ben_Project_1.Controllers
                         DeluxeInStock = s.DeluxePackageRemaining,
                         //Items = Mapper.Map(s.Inventory.First(i => i.StoreId == order.OrderStoreId)),
                     };
-                    ord.Stores.Add(tempStore);
+                    Order.Stores.Add(tempStore);
                 }
             }
 
-            return View("Create", ord);
+            return View("Create", Order);
         }
     }
 }
