@@ -36,13 +36,13 @@ namespace Ben_Project_1.Controllers
         // GET: Orders
         public ActionResult Index()
         {
-            TempData.Keep();
             string name = CustomerRepo.GetCustomerById(int.Parse(TempData.Peek("Current Customer").ToString())).FirstName
             + " " + CustomerRepo.GetCustomerById(int.Parse(TempData.Peek("Current Customer").ToString())).LastName;
             TempData["Customer Name"] = name;
+            TempData.Keep();
             return View();
         }
-
+        
         // GET: Orders/Details/5
         public ActionResult Details(int id)
         {
