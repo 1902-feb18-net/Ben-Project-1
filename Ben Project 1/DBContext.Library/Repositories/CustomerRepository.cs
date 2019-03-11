@@ -48,7 +48,11 @@ namespace Project_1.DBContext.Library.Repositories
             _customer.Id = value.CustomerId;
         }
 
-
+        public void EditCustomer(CustomerImp _customer)
+        {
+            _db.Entry(_db.Customers.Find(_customer.Id)).CurrentValues.SetValues(Mapper.Map(_customer));
+            _db.SaveChanges();
+        }
 
     }
 }

@@ -70,18 +70,12 @@ namespace Ben_Project_1.Controllers
                 {
                     FirstName = customer.FirstName,
                     LastName = customer.LastName,
-                    DefaultStoreId = StoreRepo.GetStoreByLocation(customer.DefaultStoreId).IDNumber
+                    DefaultStoreId = customer.DefaultStoreId
                 };
 
                 TempData["Current Customer"] = cust.Id;
 
-                string name = Repo.GetCustomerById(cust.Id).FirstName + " " + Repo.GetCustomerById(cust.Id).LastName;
-
-                TempData["Customer Name"] = name;
-
                 Repo.AddCustomer(cust);
-
-
                 return RedirectToAction("Index", "Orders");
             }
             catch
@@ -131,19 +125,40 @@ namespace Ben_Project_1.Controllers
         // GET: Customer/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            int temp = int.Parse(TempData.Peek("Current Customer").ToString());
+
+            var Customer = new CustomerModel
+            {
+                CustomerId = Repo.GetCustomerById(temp).Id,
+                FirstName = Repo.GetCustomerById(temp).FirstName,
+                LastName = Repo.GetCustomerById(temp).LastName,
+                DefaultStoreId = Repo.GetCustomerById(temp).DefaultStoreId
+            };
+
+            return View(Customer);
         }
 
         // POST: Customer/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(CustomerModel Customer, IFormCollection collection)
         {
             try
             {
-                // TODO: Add update logic here
+                int temp = int.Parse(TempData.Peek("Current Customer").ToString());
 
-                return RedirectToAction(nameof(Index));
+                // TODO: Add update logic here
+                var customer = new CustomerImp
+                {
+                    Id = Customer.CustomerId,
+                    FirstName = Customer.FirstName,
+                    LastName = Customer.LastName,
+                    DefaultStoreId = Customer.DefaultStoreId
+                };
+
+                Repo.EditCustomer(customer);
+
+                return RedirectToAction("Index", "Orders");
             }
             catch
             {

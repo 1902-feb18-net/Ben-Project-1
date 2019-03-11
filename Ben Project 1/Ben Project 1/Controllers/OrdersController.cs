@@ -49,6 +49,11 @@ namespace Ben_Project_1.Controllers
                 {
                     return RedirectToAction("Create", "Customer");
                 }
+
+                string name = CustomerRepo.GetCustomerById(int.Parse(TempData.Peek("Current Customer").ToString())).FirstName
+                    + " " + CustomerRepo.GetCustomerById(int.Parse(TempData.Peek("Current Customer").ToString())).LastName;
+                TempData["Customer Name"] = name;
+
                 var Order = Repo.GetAllOrdersByCustomer(int.Parse(TempData.Peek("Current Customer").ToString())).ToList();
                 var orderModels = new List<OrderModel>();
 

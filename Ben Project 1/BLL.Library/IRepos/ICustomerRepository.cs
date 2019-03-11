@@ -17,5 +17,8 @@ namespace Project_1.BLL.Library.IRepos
 
         void AddCustomer(CustomerImp _customer);
 
+        void EditCustomer(CustomerImp _customer);
+
+
     }
 }
