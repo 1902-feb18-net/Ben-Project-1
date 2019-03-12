@@ -11,7 +11,8 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
+  solutionPath: './'
 
 steps:
-- script: dotnet build --configuration $(buildConfiguration)
+- script: dotnet build "Ben Project 1" --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
