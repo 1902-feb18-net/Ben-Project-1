@@ -16,3 +16,18 @@ variables:
 steps:
 - script: dotnet build "Ben Project 1" --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
+- task: DotNetCoreCLI@2
+  inputs: 
+    command: publish
+    projects: 'Ben Project 1'
+    publishWebProjects: false
+    arguments: >-
+      --configuration $(buildConfiguration)
+      --output $(System.DefaultWorkingDirectory)/publish
+    zipAfterPublish: true
+  displayName: dotnet publish
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    azureSubscription: 'Ben-Azure'
+    WebAppName: 'mages1902gamesStore'
+    Package: $(System.ArtifactsDirectory)/**/*.zip
